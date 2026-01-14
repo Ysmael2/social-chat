@@ -1,11 +1,8 @@
 <template>
-  <nav>
-    |
-    <router-link to="/about">Registrarme</router-link> | 
-    <router-link to="login">login</router-link> | 
-  </nav>
-  
-  <router-view/>
+  <v-app>
+
+    <router-view/>
+  </v-app>
   
 </template>
 

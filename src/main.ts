@@ -4,7 +4,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import { initializeApp } from "firebase/app";
- import 'bootstrap/dist/css/bootstrap.min.css'
+ 
  import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'

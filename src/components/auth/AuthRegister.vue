@@ -1,6 +1,7 @@
 <template>
 
-    <v-sheet class="bg-cyan-lighten-4 pa-12" rounded>
+    <v-sheet class="bg-cyan-lighten-4 pa-12" height="100vh"
+    width="100vw" rounded>
         <v-card class="mx-auto px-6 py-8" max-width="344">
             <v-form
             v-model="form"
@@ -27,26 +28,41 @@
         <v-btn
         :disabled="!form"
         :loading="loading"
-        color="succes"
+        color="success"
         size="large"
         type="submit"
         variant="elevated"
         block
-        @click="authUser"
+        
         >
-            Iniciar Sesion
+            Registrarme
         </v-btn>
-            </v-form>
+
+        <br>
+
+    </v-form>
+    <v-btn
+     
+    
+    color="primary"
+    size="large"
+    type="submit"
+    variant="elevated"
+    :to="{ name: 'login' }" 
+    >
+     Iniciar Sesion
+    </v-btn>
 
         </v-card>
     </v-sheet>
+    
 </template>
 
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { VTextField } from 'vuetify/lib/components'
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+
 
 const form = ref<boolean>(false)
 const email = ref<string | null>('')
@@ -63,16 +79,7 @@ function required(v: unknown) {
   return !!v || 'field is required'
 }
 
-const authUser = () =>{
-    const auth= getAuth()
-    signInWithEmailAndPassword(auth, email.value, password.value).then( ()=>{
-        alert("exito")
-    })
-    .catch((error)=>{
-        alert("error de login" + error.message)
-    })
 
-}
 </script>
 
 <style scoped>

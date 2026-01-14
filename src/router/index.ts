@@ -1,25 +1,57 @@
 import { createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
+
+import AuthRegister from '@/components/auth/AuthRegister.vue'
+import DashboardView from '@/views/DashboardView.vue'
 
 const routes = [
   {
-    path: '/',
+    path:'/',
+    redirect:'/login'
+  },
+
+  
+  {
+    path: '/home',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
     {
     path: '/login',
     name: 'login',
-    component: LoginView
+     component: () => import('@/components/auth/AuthLogin.vue'),
+     meta: { requiresAuth: false,
+      transition: 'fade'
+      }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: AuthRegister,
+    transition: 'fade'
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView,
+    transition: 'fade'
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/AboutView.vue')
+  } ,
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/components/auth/AuthProfile.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('@/components/auth/AuthSettings.vue'),
+    meta: { requiresAuth: true }
   },
 ]
 
