@@ -1,6 +1,8 @@
 <template>
-  <!-- Botón para abrir menú -->
-  <v-btn icon @click="menu = !menu">
+  <div class="background">
+
+    <!-- Botón para abrir menú -->
+    <v-btn icon @click="menu = !menu">
     <v-avatar size="36">
       <v-img :src="authStore.userPhoto" v-if="authStore.userPhoto" />
       <span v-else class="text-h6 text-primary">
@@ -35,31 +37,31 @@
           </div>
         </div>
       </v-card-text>
-
+      
       <v-divider></v-divider>
-
+      
       <!-- Opciones del menú -->
       <v-list density="compact" nav>
         <v-list-item
           :to="{ name: 'profile' }"
           prepend-icon="mdi-account"
           title="Mi Perfil"
-        ></v-list-item>
-        
-        <v-list-item
+          ></v-list-item>
+          
+          <v-list-item
           :to="{ name: 'settings' }"
           prepend-icon="mdi-cog"
           title="Configuración"
-        ></v-list-item>
-        
-        <v-list-item
+          ></v-list-item>
+          
+          <v-list-item
           prepend-icon="mdi-shield-account"
           title="Privacidad"
         ></v-list-item>
       </v-list>
 
       <v-divider></v-divider>
-
+      
       <!-- Botón de logout -->
       <v-card-actions class="pa-4">
         <v-btn
@@ -76,10 +78,11 @@
       </v-card-actions>
     </v-card>
   </v-menu>
+</div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+  import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -122,4 +125,11 @@ const handleLogout = async () => {
 .user-info .text-grey {
   color: rgba(255, 255, 255, 0.8) !important;
 }
+  .background{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  }
 </style>

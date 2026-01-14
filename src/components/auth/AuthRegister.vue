@@ -1,8 +1,19 @@
 <template>
+   <div class="background">
 
-    <v-sheet class="bg-cyan-lighten-4 pa-12" height="100vh"
-    width="100vw" rounded>
+     <v-sheet color="transparent" class="pa-12" height="100vh"
+     width="100vw" rounded>
+     <div class="text center mb-8">
+      <div class="gradient-title text-h1 font-weight-black text-white mb2">
+        Social Chat
+      </div>
+      <div class="subtitle-gradient text-h5 font-weight-light text-white text-opacity-80">
+        Conéctate con tus amigos
+        </div>
+        <div class="accent-line mt-4" ></div>
+      </div>
         <v-card class="mx-auto px-6 py-8" max-width="344">
+          
             <v-form
             v-model="form"
         @submit.prevent="onSubmit"
@@ -39,23 +50,24 @@
         </v-btn>
 
         <br>
-
+        
     </v-form>
-    <v-btn
-     
-    
-    color="primary"
-    size="large"
-    type="submit"
-    variant="elevated"
-    :to="{ name: 'login' }" 
-    >
-     Iniciar Sesion
-    </v-btn>
+   
+<div class="text center mt4">
+          <p class="text-body-2">
+            Ya tienes cuenta?
+            <router-link 
+            :to="{name: 'login'}"
+            class="text-primary text-decoration-none font-weight-bold ml-1"
+            >Click aqui para iniciar sesion</router-link>
 
+          </p>
+        </div>
+        <br>
         </v-card>
     </v-sheet>
     
+</div>
 </template>
 
 
@@ -83,4 +95,25 @@ function required(v: unknown) {
 </script>
 
 <style scoped>
+ .background{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ }
+
+   .gradient-title {
+  background: linear-gradient(135deg, 
+    #FFD700 0%,       /* Dorado */
+    #FFA500 25%,      /* Naranja */
+    #FF69B4 50%,      /* Rosa */
+    #412677 75%,      /* Púrpura medio */
+    #121831 100%      /* Azul de tu fondo */
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+    
 </style>
