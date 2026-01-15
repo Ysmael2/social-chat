@@ -115,5 +115,17 @@ function required(v: unknown) {
   background-clip: text;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-    
+  .subtitle-gradient {
+     background: linear-gradient(135deg, 
+    #FFD700 0%,       /* Dorado */
+    #FFA500 25%,      /* Naranja */
+    #FF69B4 50%,      /* Rosa */
+    #412677 75%,      /* Púrpura medio */
+    #121831 100%      /* Azul de tu fondo */
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: -2 2px 4px rgba(0, 0, 0, 0.1);
+  }
 </style>

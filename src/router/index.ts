@@ -1,21 +1,14 @@
 import { createRouter, createWebHistory} from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
 import AuthRegister from '@/components/auth/AuthRegister.vue'
 import DashboardView from '@/views/DashboardView.vue'
+
 
 const routes = [
   {
     path:'/',
     redirect:'/login'
   },
-
   
-  {
-    path: '/home',
-    name: 'home',
-    component: HomeView
-  },
     {
     path: '/login',
     name: 'login',
@@ -34,7 +27,25 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
-    transition: 'fade'
+    children: [
+    {
+      path: '/friends',
+      name: 'friends',
+      component: ()=> import('../components/FriendsView.vue')
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: ()=> import('../views/HomeView.vue')
+    },
+    {
+      path: '/notify',
+      name: 'notify',
+      component: ()=> import('../components/NotificationsView.vue')
+    }
+
+    ]
+
   },
   {
     path: '/about',
