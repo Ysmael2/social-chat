@@ -7,16 +7,84 @@
           <v-btn icon size="large" class="mr-2" color="primary">
             <v-icon>mdi-facebook</v-icon>
           </v-btn>
+
+          <!-- icono de busqueda -->
+            <v-menu
+      v-model="searchMenu"
+      :close-on-content-click="false"
+      location="start"
+      :nudge-width="300"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          icon
+          size="large"
+          v-bind="props"
+          class="mr-2"
+        >
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </template>
+      
+      <v-card>
+        <v-card-text class="pa-4">
           <v-text-field
             v-model="search"
-            placeholder="buscar en SocialApp"
+            placeholder="buscar en SocialApp..."
             variant="outlined"
             density="compact"
             prepend-inner-icon="mdi-magnify"
             hide-details
-            class="search-field"
-            style="width: 300px;"
+            @keyup.enter="performSearch"
+            autofocus
           ></v-text-field>
+          <div class="d-flex justify-end mt-2">
+            <v-btn
+              size="small"
+              variant="text"
+              @click="searchMenu = false"
+            >
+              Cancelar
+            </v-btn>
+            <v-btn
+              size="small"
+              color="primary"
+              @click="performSearch"
+              class="ml-2"
+            >
+              Buscar
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-menu>
+  </div>
+
+          <!-- Campo de busqueda -->
+             <div v-if="showSearch" class="search-expanded">
+              <v-text-field
+                v-model="search"
+                placeholder="buscar en SocialApp"
+                variant="outlined"
+                density="compact"
+                prepend-inner-icon="mdi-magnify"
+                hide-details
+                class="search-field-expanded"
+                @keyup.enter="performSearch"
+                @blur="checkAndCloseSearch"
+                ref="searchInput"
+                autofocus
+              >
+                <template v-slot:append>
+                  <v-btn
+                    icon
+                    size="small"
+                    @click="closeSearch"
+                  >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field>
         </div>
 
         <!-- Sección centro: Iconos de navegación -->
@@ -53,7 +121,7 @@
           
           <v-btn icon size="large" class="mx-2">
             <v-icon size="28">mdi-message</v-icon>
-            <v-badge content="3" color="error" class="notification-badge"></v-badge>
+            <v-badge content="2" color="error" class="notification-badge"></v-badge>
           </v-btn>
           
           <v-btn icon size="large" class="mx-2">
@@ -63,7 +131,8 @@
 
         <!-- Sección derecha: Menú de usuario -->
         <div class="d-flex align-center ml-auto">
-          <!-- Puedes añadir más elementos aquí antes del menú -->
+
+          <!-- Puedes añadir más elementos aquí antes del menú-->
           <v-btn icon class="mr-2">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
@@ -166,7 +235,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -174,6 +243,8 @@ const router = useRouter()
 const authStore = useAuthStore()
 const menu = ref(false)
 const search = ref('')
+const showSearch = ref(false)
+const searchMenu = ref(false)
 
 // Obtener iniciales del usuario
 const getUserInitials = computed(() => {
@@ -190,6 +261,29 @@ const getUserInitials = computed(() => {
     .substring(0, 2)
     .toUpperCase()
 })
+
+const closeSearch = () => {
+  showSearch.value = false
+  search.value = ''
+}
+
+const checkAndCloseSearch = () => {
+  // Cierra solo si el campo está vacío
+  if (!search.value.trim()) {
+    setTimeout(() => {
+      showSearch.value = false
+    }, 200)
+  }
+}
+
+const performSearch = () => {
+  if (search.value.trim()) {
+    console.log('Buscando:', search.value)
+    // Aquí puedes implementar tu lógica de búsqueda
+    // Ejemplo: router.push({ name: 'search', query: { q: search.value } })
+  }
+}
+
 
 const handleLogout = async () => {
   menu.value = false

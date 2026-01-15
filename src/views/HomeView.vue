@@ -1,7 +1,7 @@
 <template>
   <br><br><br><br>
   <div class="home">
-  <h1>Chat global en tiempo Real</h1>
+  <h1>Chat global en tiempo Rfdsfdfeal</h1>
   </div>
 </template>
 
