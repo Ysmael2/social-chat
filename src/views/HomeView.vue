@@ -60,12 +60,14 @@
                   <span class="text-white">{{ getUserInitials }}</span>
                 </v-avatar>
                 <v-text-field
+                
                   v-model="newMessage"
                   placeholder="Escribe un mensaje..."
                   variant="outlined"
                   density="compact"
                   hide-details
                   rounded
+                  class="message-input"
                   @keyup.enter="sendMessage"
                 ></v-text-field>
                 <v-btn 
@@ -145,12 +147,12 @@ const getCurrentTime = () => {
 <style scoped>
 .home-container {
   min-height: calc(100vh - 64px);
-  background-color: #f0f2f5;
+  background-color: transparent;
 }
 
 .home-header {
-  background-color: white;
-  border-bottom: 1px solid #e4e6eb;
+  background-color: rgb(110, 0, 0);
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .chat-messages {
@@ -173,7 +175,7 @@ const getCurrentTime = () => {
 }
 
 .message-bubble {
-  background-color: #f0f2f5;
+  background-color: #e5e5e5;
   border-radius: 18px;
   max-width: 80%;
   word-wrap: break-word;
@@ -193,4 +195,8 @@ const getCurrentTime = () => {
   background: #c1c1c1;
   border-radius: 3px;
 }
+.message-input{
+  background-color: #e5e5e5;
+  border-radius: 30px;
+  }
 </style>

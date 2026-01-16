@@ -297,7 +297,7 @@ const handleLogout = async () => {
 
 <style scoped>
 .user-info {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #14213d 0%, #fca311 100%);
   color: white;
 }
 
@@ -309,7 +309,7 @@ const handleLogout = async () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #14213d 0%, #fca311 150%);
 }
 
 .top-bar {

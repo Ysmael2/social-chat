@@ -48,9 +48,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/Ysmael2/social-chat/issues"
   },
-  "homepage": "https://github.com/Ysmael2/social-chat#readme"
+  "homepage": "https://github.com/Ysmael2/social-chat#readme",
+  "type": "commonjs"
 }

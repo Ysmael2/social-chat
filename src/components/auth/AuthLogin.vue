@@ -53,7 +53,7 @@
         <v-btn
         :disabled="!form || authStore.isLoading"
         :loading="loading"
-        color="success"
+        color="#fca311"
         size="large"
         type="submit"
         variant="elevated"
@@ -136,16 +136,16 @@ onMounted(()=>{
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #000000 0%, #14213d 100%);
   
   }
     .gradient-title {
   background: linear-gradient(135deg, 
-    #FFD700 0%,       /* Dorado */
-    #FFA500 25%,      /* Naranja */
+    #fca311 0%,       /* Dorado */
+    #eb9800 25%,      /* Naranja */
     #FF69B4 50%,      /* Rosa */
     #412677 75%,      /* Púrpura medio */
-    #121831 100%      /* Azul de tu fondo */
+    #14213d 100%      /* Azul de tu fondo */
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -155,11 +155,11 @@ onMounted(()=>{
 
 .subtitle-gradient{
    background: linear-gradient(135deg, 
-    #FFD700 0%,       /* Dorado */
-    #FFA500 25%,      /* Naranja */
+    #fca311 0%,       /* Dorado */
+    #eb9800 25%,      /* Naranja */
     #FF69B4 50%,      /* Rosa */
     #412677 75%,      /* Púrpura medio */
-    #121831 100%      /* Azul de tu fondo */
+    #14213d 100%      /* Azul de tu fondo */
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
