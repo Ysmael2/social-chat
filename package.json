@@ -10,6 +10,7 @@
   "dependencies": {
     "@ably/chat": "^1.1.1",
     "ably": "^2.17.0",
+    "axios": "^1.13.2",
     "core-js": "^3.8.3",
     "firebase": "^12.7.0",
     "pinia": "^3.0.4",
@@ -37,5 +38,19 @@
     "sass-loader": "^12.0.0",
     "typescript": "^4.9.5",
     "vitest": "^4.0.17"
-  }
+  },
+  "description": "```\r npm install\r ```",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ysmael2/social-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Ysmael2/social-chat/issues"
+  },
+  "homepage": "https://github.com/Ysmael2/social-chat#readme"
 }

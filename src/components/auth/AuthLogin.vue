@@ -91,7 +91,6 @@ import { ref, onMounted} from 'vue'
 import { useRouter } from 'vuetify/lib/composables/router'
 import { useAuthStore } from '@/stores/auth'
 import { VTextField } from 'vuetify/lib/components'
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
