@@ -4,7 +4,7 @@
       <v-app-bar elevation="1" height="56" class="top-bar">
         <!-- Sección izquierda: Logo y búsqueda -->
         <div class="d-flex align-center">
-          <v-btn icon size="large" class="mr-2" color="primary">
+          <v-btn icon size="large" class="mr-2 d-none d-sm-flex" color="primary">
             <v-icon>mdi-facebook</v-icon>
           </v-btn>
 
@@ -20,7 +20,7 @@
           icon
           size="large"
           v-bind="props"
-          class="mr-2"
+          class="mr-sm-2 mr-0"
         >
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
@@ -123,21 +123,17 @@
             <v-icon size="28">mdi-message</v-icon>
             <v-badge content="2" color="error" class="notification-badge"></v-badge>
           </v-btn>
-          
-          <v-btn icon size="large" class="mx-2">
-            <v-icon size="28"></v-icon>
-          </v-btn>
         </div>
 
         <!-- Sección derecha: Menú de usuario -->
         <div class="d-flex align-center ml-auto">
 
           <!-- Puedes añadir más elementos aquí antes del menú-->
-          <v-btn icon class="mr-2">
+          <v-btn icon class="mr-2 d-none d-md-flex">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
           
-          <v-btn icon class="mr-2">
+          <v-btn icon class="mr-2  d-none d-md-flex">
             <v-icon>mdi-help-circle</v-icon>
           </v-btn>
 
@@ -163,7 +159,7 @@
               <!-- Información del usuario -->
               <v-card-text class="pa-4 user-info">
                 <div class="d-flex align-center">
-                  <v-avatar size="56" color="primary" class="mr-4">
+                  <v-avatar size="32" color="primary" class="mr-4">
                     <v-img :src="authStore.userPhoto" v-if="authStore.userPhoto" />
                     <span v-else class="text-white text-h5">
                       {{ getUserInitials }}
@@ -320,10 +316,12 @@ const handleLogout = async () => {
 }
 
 /* Sección de navegación centrada */
-.navigation-icons {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+@media (max-width: 960px) {
+  .navigation-icons {
+    position: static;
+    transform: none;
+    margin: 0 16px;
+  }
 }
 
 /* Sección derecha con menú */
@@ -350,11 +348,17 @@ const handleLogout = async () => {
     width: 200px !important;
   }
   
+  @media (max-width: 600px) {
   .navigation-icons {
-    position: static;
-    transform: none;
-    margin: 0 16px;
+    flex: 1;
+    justify-content: center;
   }
+
+  .top-bar > .ml-auto {
+    margin-left: auto !important;
+  }
+}
+
   
   .top-bar {
     flex-wrap: wrap;

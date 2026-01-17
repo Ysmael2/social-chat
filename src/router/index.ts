@@ -27,21 +27,25 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
+    meta: { requiresAuth: true },
     children: [
     {
       path: '/friends',
       name: 'friends',
-      component: ()=> import('../components/FriendsView.vue')
+      component: ()=> import('../components/FriendsView.vue'),
+    meta: { requiresAuth: true }
     },
     {
       path: '/home',
       name: 'home',
-      component: ()=> import('../views/HomeView.vue')
+      component: ()=> import('../views/HomeView.vue'),
+    meta: { requiresAuth: true }
     },
     {
       path: '/notify',
       name: 'notify',
-      component: ()=> import('../components/NotificationsView.vue')
+      component: ()=> import('../components/NotificationsView.vue'),
+    meta: { requiresAuth: true }
     }
 
     ]
@@ -50,7 +54,8 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('../views/AboutView.vue')
+    component: () => import('../views/AboutView.vue'),
+    meta: { requiresAuth: true }
   } ,
   {
     path: '/profile',
