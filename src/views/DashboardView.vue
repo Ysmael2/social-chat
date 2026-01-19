@@ -9,92 +9,80 @@
           </v-btn>
 
           <!-- icono de busqueda -->
-            <v-menu
-      v-model="searchMenu"
-      :close-on-content-click="false"
-      location="start"
-      :nudge-width="300"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn
-          icon
-          size="large"
-          v-bind="props"
-          class="mr-sm-2 mr-0"
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </template>
-      
-      <v-card>
-        <v-card-text class="pa-4">
+          <v-menu
+            v-model="searchMenu"
+            :close-on-content-click="false"
+            location="start"
+            :nudge-width="300"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                icon
+                size="large"
+                v-bind="props"
+                class="mr-sm-2 mr-0 d-md-none"
+              >
+                <v-icon>mdi-magnify</v-icon>
+              </v-btn>
+            </template>
+            
+            <v-card>
+              <v-card-text class="pa-4">
+                <v-text-field
+                  v-model="search"
+                  placeholder="buscar en SocialApp..."
+                  variant="outlined"
+                  density="compact"
+                  prepend-inner-icon="mdi-magnify"
+                  hide-details
+                  @keyup.enter="performSearch"
+                  autofocus
+                ></v-text-field>
+                <div class="d-flex justify-end mt-2">
+                  <v-btn
+                    size="small"
+                    variant="text"
+                    @click="searchMenu = false"
+                  >
+                    Cancelar
+                  </v-btn>
+                  <v-btn
+                    size="small"
+                    color="primary"
+                    @click="performSearch"
+                    class="ml-2"
+                  >
+                    Buscar
+                  </v-btn>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+
+          <!-- Campo de busqueda flexible en desktop -->
           <v-text-field
             v-model="search"
-            placeholder="buscar en SocialApp..."
-            variant="outlined"
+            placeholder="buscar en SocialApp"
+            variant="plain"
             density="compact"
             prepend-inner-icon="mdi-magnify"
             hide-details
+            class="search-field d-none d-md-flex"
+            :style="{ width: searchFieldWidth }"
             @keyup.enter="performSearch"
-            autofocus
+            @focus="expandSearchField"
+            @blur="collapseSearchField"
           ></v-text-field>
-          <div class="d-flex justify-end mt-2">
-            <v-btn
-              size="small"
-              variant="text"
-              @click="searchMenu = false"
-            >
-              Cancelar
-            </v-btn>
-            <v-btn
-              size="small"
-              color="primary"
-              @click="performSearch"
-              class="ml-2"
-            >
-              Buscar
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-menu>
-  </div>
-
-          <!-- Campo de busqueda -->
-             <div v-if="showSearch" class="search-expanded">
-              <v-text-field
-                v-model="search"
-                placeholder="buscar en SocialApp"
-                variant="outlined"
-                density="compact"
-                prepend-inner-icon="mdi-magnify"
-                hide-details
-                class="search-field-expanded"
-                @keyup.enter="performSearch"
-                @blur="checkAndCloseSearch"
-                ref="searchInput"
-                autofocus
-              >
-                <template v-slot:append>
-                  <v-btn
-                    icon
-                    size="small"
-                    @click="closeSearch"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-              </v-text-field>
         </div>
 
-        <!-- Sección centro: Iconos de navegación -->
-        <div class="navigation-icons d-flex justify-center">
+        <!-- Sección centro: Iconos de navegación - CENTRADOS -->
+        <div class="navigation-icons">
           <v-btn
             icon
             size="large"
             :to="{name: 'home'}"
             exact
-            class="mx-2"
+            class="mx-1"
             :color="$route.name === 'home' ? 'primary' : ''"
           >
             <v-icon size="28">mdi-home</v-icon>
@@ -105,7 +93,7 @@
             size="large"
             :to="{name: 'friends'}"
             exact
-            class="mx-2"
+            class="mx-1"
             :color="$route.name === 'friends' ? 'primary' : ''"
           >
             <v-badge dot color="error">
@@ -113,13 +101,12 @@
             </v-badge>
           </v-btn>
           
-          <!-- Añade más iconos aquí -->
-          <v-btn icon size="large" class="mx-2">
+          <v-btn icon size="large" class="mx-1">
             <v-icon size="28">mdi-bell</v-icon>
             <v-badge dot color="error" class="notification-badge"></v-badge>
           </v-btn>
           
-          <v-btn icon size="large" class="mx-2">
+          <v-btn icon size="large" class="mx-1">
             <v-icon size="28">mdi-message</v-icon>
             <v-badge content="2" color="error" class="notification-badge"></v-badge>
           </v-btn>
@@ -127,13 +114,11 @@
 
         <!-- Sección derecha: Menú de usuario -->
         <div class="d-flex align-center ml-auto">
-
-          <!-- Puedes añadir más elementos aquí antes del menú-->
           <v-btn icon class="mr-2 d-none d-md-flex">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
           
-          <v-btn icon class="mr-2  d-none d-md-flex">
+          <v-btn icon class="mr-2 d-none d-md-flex">
             <v-icon>mdi-help-circle</v-icon>
           </v-btn>
 
@@ -159,7 +144,7 @@
               <!-- Información del usuario -->
               <v-card-text class="pa-4 user-info">
                 <div class="d-flex align-center">
-                  <v-avatar size="32" color="primary" class="mr-4">
+                  <v-avatar size="56" color="primary" class="mr-4">
                     <v-img :src="authStore.userPhoto" v-if="authStore.userPhoto" />
                     <span v-else class="text-white text-h5">
                       {{ getUserInitials }}
@@ -231,7 +216,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -239,8 +224,8 @@ const router = useRouter()
 const authStore = useAuthStore()
 const menu = ref(false)
 const search = ref('')
-const showSearch = ref(false)
 const searchMenu = ref(false)
+const searchFieldWidth = ref('240px')
 
 // Obtener iniciales del usuario
 const getUserInitials = computed(() => {
@@ -258,28 +243,20 @@ const getUserInitials = computed(() => {
     .toUpperCase()
 })
 
-const closeSearch = () => {
-  showSearch.value = false
-  search.value = ''
+const expandSearchField = () => {
+  searchFieldWidth.value = '400px'
 }
 
-const checkAndCloseSearch = () => {
-  // Cierra solo si el campo está vacío
-  if (!search.value.trim()) {
-    setTimeout(() => {
-      showSearch.value = false
-    }, 200)
-  }
+const collapseSearchField = () => {
+  searchFieldWidth.value = '240px'
 }
 
 const performSearch = () => {
   if (search.value.trim()) {
     console.log('Buscando:', search.value)
     // Aquí puedes implementar tu lógica de búsqueda
-    // Ejemplo: router.push({ name: 'search', query: { q: search.value } })
   }
 }
-
 
 const handleLogout = async () => {
   menu.value = false
@@ -315,18 +292,47 @@ const handleLogout = async () => {
   padding: 0 16px;
 }
 
-/* Sección de navegación centrada */
-@media (max-width: 960px) {
-  .navigation-icons {
-    position: static;
-    transform: none;
-    margin: 0 16px;
-  }
+/* Sección izquierda */
+.d-flex.align-center:first-child {
+  flex: 1;
+  min-width: 200px;
 }
 
-/* Sección derecha con menú */
+/* Campo de búsqueda flexible */
+.search-field {
+  transition: width 0.3s ease !important;
+  min-width: 200px;
+  max-width: 500px;
+  background-color: #f0f2f5;
+  border-radius: 20px;
+}
+
+.search-field :deep(.v-field__outline) {
+  border: none;
+}
+
+.search-field:focus-within,
+.search-field-mobile:focus-within {
+  box-shadow: 0 0 0 2px rgba(252, 163, 17, 0.3);
+}
+
+
+/* Sección centro: Iconos de navegación */
+.navigation-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 2;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Sección derecha */
 .ml-auto {
-  margin-left: auto !important;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Badges para notificaciones */
@@ -337,43 +343,92 @@ const handleLogout = async () => {
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1279px) {
   .search-field {
-    width: 250px !important;
+    min-width: 180px;
+  }
+  
+  .navigation-icons {
+    max-width: 350px;
   }
 }
 
 @media (max-width: 960px) {
-  .search-field {
-    width: 200px !important;
-  }
-  
-  @media (max-width: 600px) {
   .navigation-icons {
     flex: 1;
+    max-width: none;
     justify-content: center;
+    margin: 0;
   }
-
-  .top-bar > .ml-auto {
-    margin-left: auto !important;
+  
+  .d-flex.align-center:first-child,
+  .ml-auto {
+    flex: none;
+    min-width: auto;
+  }
+  
+  .d-flex.align-center:first-child {
+    justify-content: flex-start;
+  }
+  
+  .ml-auto {
+    justify-content: flex-end;
+  }
+  
+  .search-field {
+    min-width: 180px;
   }
 }
 
-  
-  .top-bar {
-    flex-wrap: wrap;
-    height: auto !important;
-    padding: 8px;
+@media (max-width: 768px) {
+  .search-field {
+    min-width: 150px;
   }
 }
 
 @media (max-width: 600px) {
-  .search-field {
-    width: 150px !important;
+  .navigation-icons {
+    flex: 2;
+    justify-content: space-around;
   }
   
-  .navigation-icons .mx-2 {
-    margin: 0 4px !important;
+  .d-flex.align-center:first-child {
+    flex: 1;
   }
+  
+  .ml-auto {
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  .navigation-icons .mx-1 {
+    margin: 0 2px !important;
+  }
+  
+  .top-bar {
+    padding: 0 8px;
+  }
+}
+
+/* Efecto hover para botones de navegación */
+.navigation-icons .v-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Indicador activo para botones de navegación */
+.navigation-icons .v-btn--active {
+  position: relative;
+}
+
+.navigation-icons .v-btn--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background-color: #fca311;
+  border-radius: 3px 3px 0 0;
 }
 </style>

@@ -19,14 +19,17 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+  const token = ref<string | null>(null)
   const unsubscribeAuth = ref<() => void>(() => {undefined})
 
   // Computed
   const isAuthenticated = computed(() => !!user.value)
+  const isAuthReady = ref(false)
   const userEmail = computed(() => user.value?.email || '')
   const userName = computed(() => user.value?.displayName || user.value?.email?.split('@')[0] || 'Invitado')
   const userPhoto = computed(() => user.value?.photoURL || '')
   const userId = computed(() => user.value?.uid || '')
+ 
 
   // Acciones
   const login = async (email: string, password: string) => {
@@ -37,6 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
       const auth = getAuth()
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       user.value = userCredential.user
+
       
       return { success: true }
     } catch (err: any) {
@@ -78,10 +82,13 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
     try {
       isLoading.value = true
+
+      //cerras sesion firebase
       const auth = getAuth()
       await signOut(auth)
       user.value = null
       error.value = null
+      token.value = null
       return { success: true }
     } catch (err: any) {
       error.value = getErrorMessage(err.code)
@@ -90,25 +97,37 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = false
     }
   }
+
+  const clearAllStorage = () => {
+    try{
+      //limpiar localstorage -solo claves relacionadas con autenticacion
+      const localStorageKeys = Object.keys(localStorage)
+      localStorageKeys.forEach(key => {
+        //elimina solo las claves que contengan estas palabras
+        const authKeywords = ['auth','token','user','firebase','session','login']
+        const shouldDelete = authKeywords.some(keyword =>
+          key.toLowerCase().includes(keyword.toLowerCase())
+        )
+        if(shouldDelete){
+          localStorage.removeItem(key)
+        }
+      })
+      sessionStorage.clear()
+    }catch(storageError){
+      console.warn('error al limpiar el storage:', storageError)
+      //si hay error intentar limpiar todo como ultimo recurso
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+        
+      } catch (clearAllError) {
+        console.error('error al limpiar todo el storage', clearAllError)       
+      }
+    }
+  }
+
   
-
-  // const resetPassword = async (email: string) => {
-  //   try {
-  //     isLoading.value = true
-  //     error.value = null
-      
-  //     const auth = getAuth()
-  //     await sendPasswordResetEmail(auth, email)
-      
-  //     return { success: true }
-  //   } catch (err: any) {
-  //     error.value = getErrorMessage(err.code)
-  //     return { success: false }
-  //   } finally {
-  //     isLoading.value = false
-  //   }
-  // }
-
+  
   const updateUserProfile = async (data: { displayName?: string; photoURL?: string }) => {
     try {
       if (!user.value) throw new Error('Usuario no autenticado')
@@ -177,9 +196,17 @@ export const useAuthStore = defineStore('auth', () => {
   const initAuthListener = () => {
     const auth = getAuth()
     
+     if (isAuthReady.value) return
     // Guardar la función de unsubscribe para limpiar después
-    unsubscribeAuth.value = onAuthStateChanged(auth, (firebaseUser) => {
+    unsubscribeAuth.value = onAuthStateChanged(auth,  async (firebaseUser) => {
       user.value = firebaseUser
+      if(firebaseUser){
+        token.value = await firebaseUser.getIdToken()
+      }else{
+        token.value = null
+      }
+
+      isAuthReady.value = true
       isLoading.value = false
     })
   }
@@ -231,10 +258,12 @@ export const useAuthStore = defineStore('auth', () => {
     // Estado
     user,
     isLoading,
+    token,
     error,
     
     // Computed
     isAuthenticated,
+    isAuthReady,
     userEmail,
     userName,
     userPhoto,

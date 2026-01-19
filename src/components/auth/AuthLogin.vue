@@ -87,7 +87,7 @@
 
 
 <script lang="ts" setup>
-import { ref, onMounted} from 'vue'
+import { ref, } from 'vue'
 import { useRouter } from 'vuetify/lib/composables/router'
 import { useAuthStore } from '@/stores/auth'
 import { VTextField } from 'vuetify/lib/components'
@@ -126,9 +126,6 @@ const onSubmit = async () => {
   }
 }
 
-onMounted(()=>{
-    authStore.initAuthListener()
-})
 </script>
 
 <style scoped>
