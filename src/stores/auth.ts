@@ -27,7 +27,6 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthReady = ref(false)
   const userEmail = computed(() => user.value?.email || '')
   const userName = computed(() => user.value?.displayName || user.value?.email?.split('@')[0] || 'Invitado')
-  const userPhoto = computed(() => user.value?.photoURL || '')
   const userId = computed(() => user.value?.uid || '')
  
 
@@ -266,7 +265,6 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthReady,
     userEmail,
     userName,
-    userPhoto,
     userId,
     
     // Acciones
