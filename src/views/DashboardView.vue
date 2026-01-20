@@ -211,7 +211,9 @@
         </div>
       </v-app-bar>
     </div>
-    <router-view />
+    <div class="main-content">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -283,6 +285,15 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #14213d 0%, #fca311 150%);
+   padding-top: 56px;
+}
+
+.dashboard-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .top-bar {

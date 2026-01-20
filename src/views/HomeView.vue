@@ -1,21 +1,21 @@
 
   <!-- layout principal -->
  <template>
-<br><br><br>
+<br><br>
 <div class="home-container">
     <!-- Contenedor principal -->
-    <v-container class="pa-0">
-      <v-row no-gutters>
+    <v-container fluid>
+      <v-row no-gutters justify="center">
 
         <!-- Chat Global -->
-        <v-col cols="12" md="6">
+        <v-col cols="12" xl="8" lg="10" md="11" sm="11">
          
           <!-- Chat en tiempo real -->
-          <v-card class="ma-2" rounded="lg">
+          <v-card class="ma-2 ma-md-4" rounded="lg">
             <v-card-title class="d-flex align-center">
               <v-icon color="primary" class="mr-2">mdi-chat</v-icon>
               <span>Chat Global</span>
-              <v-chip size="small" color="primary" class="ml-2">
+              <v-chip size="small" color="primary" class="ml-3">
                 {{ onlineUsers }} en línea
               </v-chip>
             </v-card-title>
@@ -146,8 +146,9 @@ const getCurrentTime = () => {
 
 <style scoped>
 .home-container {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 56px);
   background-color: transparent;
+   padding-top: 2px;
 }
 
 .home-header {
@@ -198,5 +199,16 @@ const getCurrentTime = () => {
 .message-input{
   background-color: #e5e5e5;
   border-radius: 30px;
+  }
+
+  @media (max-width: 599px){
+    .home-container{
+      padding-top: 0px;
+    }
+
+    .home-container .v-card{
+      border-radius: 2 !important;
+      margin: 0 !important;
+    }
   }
 </style>

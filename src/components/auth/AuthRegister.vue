@@ -3,8 +3,16 @@
 
      <v-sheet color="transparent" class="pa-12" height="100vh"
      width="100vw" rounded>
+
+              <v-img
+            :src="logo"
+            alt="Logo SocialApp"
+            max-width="180"
+            max-height="180"
+            class="mx-auto mb-2"
+          />
      <div class="text center mb-8">
-      <div class="gradient-title text-h1 font-weight-black text-white mb2">
+      <div class="gradient-title text-h2 font-weight-black text-white mb2">
         Social Chat
       </div>
       <div class="subtitle-gradient text-h5 font-weight-light text-white text-opacity-80">
@@ -74,6 +82,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { VTextField } from 'vuetify/lib/components'
+import logo from '@/assets/icon/logo.png'
 
 
 const form = ref<boolean>(false)
