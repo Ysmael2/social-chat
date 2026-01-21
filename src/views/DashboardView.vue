@@ -9,7 +9,7 @@
       class="main-drawer"
     >
       <!-- Sección superior del drawer (Logo y búsqueda) -->
-      <div class="drawer-header pa-4 border">
+      <div class="drawer-header pa-4 border-bottom rounded-lg">
         <!-- Logo -->
         <div class="d-flex align-center mb-4">
           <v-container icon size="large" color="primary" class="mr-2">

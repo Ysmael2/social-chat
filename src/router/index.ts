@@ -33,7 +33,7 @@ const routes = [
     {
       path: 'friends',
       name: 'friends',
-      component: ()=> import('../components/FriendsView.vue'),
+      component: ()=> import('../components/friends/FriendsView.vue'),
     meta: { requiresAuth: true }
     },
     {
