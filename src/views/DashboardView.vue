@@ -1,128 +1,216 @@
 <template>
   <div class="background">
+    <!-- Drawer lateral permanente en desktop, temporal en mobile -->
+    <v-navigation-drawer
+      v-model="drawer"
+      :permanent="isDesktop"
+      :temporary="!isDesktop"
+      width="280"
+      class="main-drawer"
+    >
+      <!-- Sección superior del drawer (Logo y búsqueda) -->
+      <div class="drawer-header pa-4 border">
+        <!-- Logo -->
+        <div class="d-flex align-center mb-4">
+          <v-container icon size="large" color="primary" class="mr-2">
+             <v-img
+            :src="logo"
+            alt="Logo SocialApp"
+            max-width="180"
+            max-height="180"
+            class="mx-auto mb-2"
+          />
+          </v-container>
+          <span class="text-h6 font-weight-bold">TecnoChat</span>
+        </div>
+
+        <!-- Búsqueda en drawer -->
+        <v-text-field
+          v-model="search"
+          placeholder="Buscar en TecnoChat..."
+          variant="outlined"
+          density="compact"
+          prepend-inner-icon="mdi-magnify"
+          hide-details
+          @keyup.enter="performSearch"
+          class="search-field-drawer"
+        ></v-text-field>
+      </div>
+
+      <!-- Menú de navegación principal -->
+      <v-list nav density="compact">
+        <v-list-item
+          :to="{ name: 'home' }"
+          prepend-icon="mdi-home"
+          title="Inicio"
+          :active="$route.name === 'home'"
+          active-class="active-menu-item"
+        ></v-list-item>
+        
+        <v-list-item
+          :to="{ name: 'friends' }"
+          prepend-icon="mdi-account-group"
+          title="Amigos"
+          :active="$route.name === 'friends'"
+          active-class="active-menu-item"
+        >
+          <template v-slot:append>
+            <v-badge dot color="error" inline></v-badge>
+          </template>
+        </v-list-item>
+        
+        <v-list-item
+          prepend-icon="mdi-bell"
+          title="Notificaciones"
+          @click="menu = false"
+        >
+          <template v-slot:append>
+            <v-badge dot color="error" inline></v-badge>
+          </template>
+        </v-list-item>
+        
+        <v-list-item
+          prepend-icon="mdi-message"
+          title="Mensajes"
+          @click="menu = false"
+        >
+          <template v-slot:append>
+            <v-badge content="2" color="error" inline></v-badge>
+          </template>
+        </v-list-item>
+      </v-list>
+
+      <v-divider class="my-2"></v-divider>
+
+      <!-- Menú secundario -->
+      <v-list nav density="compact">
+        <v-list-item
+          prepend-icon="mdi-plus"
+          title="Crear"
+          @click="menu = false"
+        ></v-list-item>
+        
+        <v-list-item
+          prepend-icon="mdi-help-circle"
+          title="Ayuda"
+          @click="menu = false"
+        ></v-list-item>
+        
+        <v-list-item
+          :to="{ name: 'profile' }"
+          prepend-icon="mdi-account"
+          title="Mi Perfil"
+          @click="menu = false"
+        ></v-list-item>
+        
+        <v-list-item
+          :to="{ name: 'settings' }"
+          prepend-icon="mdi-cog"
+          title="Configuración"
+          @click="menu = false"
+        ></v-list-item>
+        
+        <v-list-item
+          prepend-icon="mdi-shield-account"
+          title="Privacidad"
+          @click="menu = false"
+        ></v-list-item>
+      </v-list>
+
+      <!-- Botón de logout en el drawer -->
+      <template v-slot:append>
+        <div class="pa-4">
+          <v-btn
+            color="error"
+            variant="flat"
+            prepend-icon="mdi-logout"
+            @click="handleLogout"
+            :loading="authStore.isLoading"
+            :disabled="authStore.isLoading"
+            block
+          >
+            Cerrar Sesión
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+
+    <!-- Barra superior fija con hamburger menu y perfil -->
     <div class="dashboard-container">
       <v-app-bar elevation="1" height="56" class="top-bar">
-        <!-- Sección izquierda: Logo y búsqueda -->
-        <div class="d-flex align-center">
-          <v-btn icon size="large" class="mr-2 d-none d-sm-flex" color="primary">
-            <v-icon>mdi-facebook</v-icon>
-          </v-btn>
+        <!-- Botón hamburger para mostrar/ocultar drawer en mobile -->
+        <v-btn
+          icon
+          size="large"
+          class="mr-2"
+          @click="toggleDrawer"
+          v-if="!isDesktop"
+        >
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
 
-          <!-- icono de busqueda -->
-          <v-menu
-            v-model="searchMenu"
-            :close-on-content-click="false"
-            location="start"
-            :nudge-width="300"
-          >
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon
-                size="large"
-                v-bind="props"
-                class="mr-sm-2 mr-0 d-md-none"
-              >
-                <v-icon>mdi-magnify</v-icon>
-              </v-btn>
-            </template>
-            
-            <v-card>
-              <v-card-text class="pa-4">
-                <v-text-field
-                  v-model="search"
-                  placeholder="buscar en SocialApp..."
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-magnify"
-                  hide-details
-                  @keyup.enter="performSearch"
-                  autofocus
-                ></v-text-field>
-                <div class="d-flex justify-end mt-2">
-                  <v-btn
-                    size="small"
-                    variant="text"
-                    @click="searchMenu = false"
-                  >
-                    Cancelar
-                  </v-btn>
-                  <v-btn
-                    size="small"
-                    color="primary"
-                    @click="performSearch"
-                    class="ml-2"
-                  >
-                    Buscar
-                  </v-btn>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-menu>
-
-          <!-- Campo de busqueda flexible en desktop -->
-          <v-text-field
-            v-model="search"
-            placeholder="buscar en SocialApp"
-            variant="plain"
-            density="compact"
-            prepend-inner-icon="mdi-magnify"
-            hide-details
-            class="search-field d-none d-md-flex"
-            :style="{ width: searchFieldWidth }"
-            @keyup.enter="performSearch"
-            @focus="expandSearchField"
-            @blur="collapseSearchField"
-          ></v-text-field>
+        <!-- Logo en mobile -->
+        <div class="d-flex align-center" v-if="!isDesktop">
+          <span class="text-h6 font-weight-bold d-sm-flex d-none">SocialApp</span>
         </div>
 
-        <!-- Sección centro: Iconos de navegación - CENTRADOS -->
-        <div class="navigation-icons">
-          <v-btn
-            icon
-            size="large"
-            :to="{name: 'home'}"
-            exact
-            class="mx-1"
-            :color="$route.name === 'home' ? 'primary' : ''"
-          >
-            <v-icon size="28">mdi-home</v-icon>
-          </v-btn>
-          
-          <v-btn
-            icon
-            size="large"
-            :to="{name: 'friends'}"
-            exact
-            class="mx-1"
-            :color="$route.name === 'friends' ? 'primary' : ''"
-          >
-            <v-badge dot color="error">
-              <v-icon size="28">mdi-account-group</v-icon>
-            </v-badge>
-          </v-btn>
-          
-          <v-btn icon size="large" class="mx-1">
-            <v-icon size="28">mdi-bell</v-icon>
-            <v-badge dot color="error" class="notification-badge"></v-badge>
-          </v-btn>
-          
-          <v-btn icon size="large" class="mx-1">
-            <v-icon size="28">mdi-message</v-icon>
-            <v-badge content="2" color="error" class="notification-badge"></v-badge>
-          </v-btn>
-        </div>
+        <!-- Espacio para centrar el contenido en mobile -->
+        <div class="flex-grow-1 d-md-none"></div>
 
-        <!-- Sección derecha: Menú de usuario -->
+        <!-- Botón de búsqueda en mobile -->
+        <v-menu
+          v-model="searchMenu"
+          :close-on-content-click="false"
+          location="start"
+          :nudge-width="300"
+          v-if="!isDesktop"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              icon
+              size="large"
+              v-bind="props"
+              class="mr-2"
+            >
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+          </template>
+          
+          <v-card>
+            <v-card-text class="pa-4">
+              <v-text-field
+                v-model="search"
+                placeholder="buscar en SocialApp..."
+                variant="outlined"
+                density="compact"
+                prepend-inner-icon="mdi-magnify"
+                hide-details
+                @keyup.enter="performSearch"
+                autofocus
+              ></v-text-field>
+              <div class="d-flex justify-end mt-2">
+                <v-btn
+                  size="small"
+                  variant="text"
+                  @click="searchMenu = false"
+                >
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  size="small"
+                  color="primary"
+                  @click="performSearch"
+                  class="ml-2"
+                >
+                  Buscar
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+
+        <!-- Menú de perfil (SIEMPRE visible y en la derecha) -->
         <div class="d-flex align-center ml-auto">
-          <v-btn icon class="mr-2 d-none d-md-flex">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-          
-          <v-btn icon class="mr-2 d-none d-md-flex">
-            <v-icon>mdi-help-circle</v-icon>
-          </v-btn>
-
-          <!-- Menú desplegable -->
           <v-menu
             v-model="menu"
             location="end"
@@ -211,23 +299,44 @@
         </div>
       </v-app-bar>
     </div>
-    <div class="main-content">
+
+    <!-- Contenido principal -->
+    <div class="main-content" :class="{ 'with-drawer': isDesktop }">
       <router-view />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import logo from '@/assets/icon/logo.png'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const menu = ref(false)
 const search = ref('')
 const searchMenu = ref(false)
-const searchFieldWidth = ref('240px')
+const drawer = ref(true)
+const isDesktop = ref(window.innerWidth >= 960)
+
+// Detectar cambio de tamaño de pantalla
+const updateIsDesktop = () => {
+  isDesktop.value = window.innerWidth >= 960
+  // En desktop, el drawer siempre está abierto
+  if (isDesktop.value) {
+    drawer.value = true
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateIsDesktop)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateIsDesktop)
+})
 
 // Obtener iniciales del usuario
 const getUserInitials = computed(() => {
@@ -245,12 +354,8 @@ const getUserInitials = computed(() => {
     .toUpperCase()
 })
 
-const expandSearchField = () => {
-  searchFieldWidth.value = '400px'
-}
-
-const collapseSearchField = () => {
-  searchFieldWidth.value = '240px'
+const toggleDrawer = () => {
+  drawer.value = !drawer.value
 }
 
 const performSearch = () => {
@@ -285,7 +390,7 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #14213d 0%, #fca311 150%);
-   padding-top: 56px;
+  padding-top: 56px;
 }
 
 .dashboard-container {
@@ -301,145 +406,95 @@ const handleLogout = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
+  background-color: white;
 }
 
-/* Sección izquierda */
-.d-flex.align-center:first-child {
+/* Contenido principal con ajuste para drawer */
+.main-content {
   flex: 1;
-  min-width: 200px;
+  padding: 16px;
 }
 
-/* Campo de búsqueda flexible */
-.search-field {
-  transition: width 0.3s ease !important;
-  min-width: 200px;
-  max-width: 500px;
-  background-color: #f0f2f5;
-  border-radius: 20px;
+.main-content.with-drawer {
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
 }
 
-.search-field :deep(.v-field__outline) {
-  border: none;
+/* Drawer personalizado */
+.main-drawer {
+  position: fixed !important;
+  height: 100vh !important;
+  top: 0 !important;
+  background-color: white !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.search-field:focus-within,
-.search-field-mobile:focus-within {
-  box-shadow: 0 0 0 2px rgba(252, 163, 17, 0.3);
+/* Header del drawer */
+.drawer-header {
+  background: linear-gradient(135deg, #14213d 0%, #fca311 100%);
+  color: white;
 }
 
-
-/* Sección centro: Iconos de navegación */
-.navigation-icons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 2;
-  max-width: 400px;
-  margin: 0 auto;
+.search-field-drawer {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
 }
 
-/* Sección derecha */
-.ml-auto {
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  justify-content: flex-end;
+.search-field-drawer :deep(.v-field__outline) {
+  border-color: rgba(255, 255, 255, 0.5) !important;
 }
 
-/* Badges para notificaciones */
-.notification-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+.search-field-drawer :deep(.v-field__prepend-inner) {
+  color: white !important;
+}
+
+.search-field-drawer :deep(input) {
+  color: white !important;
+}
+
+.search-field-drawer :deep(.v-field__clearable) {
+  color: white !important;
+}
+
+.search-field-drawer :deep(.v-field__placeholder) {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Ítem activo en el menú */
+.active-menu-item {
+  color: #fca311 !important;
+  background-color: rgba(252, 163, 17, 0.1) !important;
+}
+
+.active-menu-item :deep(.v-list-item__prepend .v-icon) {
+  color: #fca311 !important;
 }
 
 /* Responsive */
-@media (max-width: 1279px) {
-  .search-field {
-    min-width: 180px;
-  }
-  
-  .navigation-icons {
-    max-width: 350px;
-  }
-}
-
 @media (max-width: 960px) {
-  .navigation-icons {
-    flex: 1;
-    max-width: none;
-    justify-content: center;
-    margin: 0;
+  .main-content.with-drawer {
+    margin-left: 0;
   }
   
-  .d-flex.align-center:first-child,
-  .ml-auto {
-    flex: none;
-    min-width: auto;
+  .main-drawer {
+    top: 0 !important;
+    height: 100vh !important;
+    z-index: 1100 !important;
   }
   
-  .d-flex.align-center:first-child {
-    justify-content: flex-start;
-  }
-  
-  .ml-auto {
-    justify-content: flex-end;
-  }
-  
-  .search-field {
-    min-width: 180px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-field {
-    min-width: 150px;
+  .background {
+    padding-top: 56px;
   }
 }
 
 @media (max-width: 600px) {
-  .navigation-icons {
-    flex: 2;
-    justify-content: space-around;
-  }
-  
-  .d-flex.align-center:first-child {
-    flex: 1;
-  }
-  
-  .ml-auto {
-    flex: 1;
-    justify-content: flex-end;
-  }
-  
-  .navigation-icons .mx-1 {
-    margin: 0 2px !important;
-  }
-  
   .top-bar {
     padding: 0 8px;
   }
 }
 
-/* Efecto hover para botones de navegación */
-.navigation-icons .v-btn:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-/* Indicador activo para botones de navegación */
-.navigation-icons .v-btn--active {
-  position: relative;
-}
-
-.navigation-icons .v-btn--active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 3px;
-  background-color: #fca311;
-  border-radius: 3px 3px 0 0;
+/* Asegurar que el botón de perfil esté siempre a la derecha */
+.ml-auto {
+  margin-left: auto !important;
 }
 </style>
